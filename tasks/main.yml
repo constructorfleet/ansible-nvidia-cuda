@@ -34,6 +34,11 @@
 - name: Install CUDA toolkit
   command: /bin/bash /tmp/cuda_toolkit.run
 
+- name: Cleanup CUDA toolkit installer
+  file:
+    path: /tmp/cuda_toolkit.run
+    state: absent
+
 - name: Retrieve cuDNN library
   get_url:
     url: "{{ cudnn_library_url }}"
@@ -44,6 +49,11 @@
 - name: Install cuDNN library
   apt: deb="/tmp/cudnn_library.deb"
 
+- name: Cleanup cuDNN library
+  file:
+    path: /tmp/cudnn_library.deb
+    state: absent
+
 - name: Retrieve TensorRT tool
   get_url:
     url: "{{ tensorrt_tool_url }}"
@@ -53,3 +63,8 @@
 # TODO: Deb vs RedHat
 - name: Install TensorRT
   apt: deb="/tmp/tensorrt.deb"
+
+- name: Cleanup TensorRT
+  file:
+    path: /tmp/tensorrt.deb
+    state: absent
