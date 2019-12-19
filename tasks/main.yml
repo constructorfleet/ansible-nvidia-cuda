@@ -12,7 +12,7 @@
 
 - name: Make sure /var/cuda exists
   file:
-    path: /var/cuda
+    path: /var/cuda/tmp
     state: directory
     owner: root
     group: root
@@ -40,7 +40,7 @@
     mode: '0777'
 
 - name: Install CUDA toolkit
-  command: /bin/bash /var/cuda/cuda_toolkit.run
+  command: /bin/bash /var/cuda/cuda_toolkit.run --tmpdir=/var/cuda/tmp/ --silent
 
 - name: Cleanup CUDA toolkit installer
   file:
