@@ -21,10 +21,13 @@
         mode: '0644'
         owner: root
         group: root
-
     - name: Reboot for mod blacklist to take effect
-      reboot:
-        reboot_timeout: 180
+      command: shutdown -r now
+      async: 0
+      poll: 0
+    - name: Wait for server to come back
+      wait_for_connection:
+        timeout: 900
   when:
     - not mod_blacklisted.stat.exists
 
