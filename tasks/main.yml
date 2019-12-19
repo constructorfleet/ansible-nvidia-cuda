@@ -22,12 +22,8 @@
         owner: root
         group: root
     - name: Reboot for mod blacklist to take effect
-      command: shutdown -r now
-      async: 0
-      poll: 0
-    - name: Wait for server to come back
-      wait_for_connection:
-        timeout: 900
+      reboot:
+        reboot_timeout: 360
   when:
     - not mod_blacklisted.stat.exists
 
