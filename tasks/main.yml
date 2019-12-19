@@ -1,5 +1,5 @@
 - name: Blacklist nouveau mod
-  file:
+  copy:
     src: nvidia-installer-disable-nouveau.conf
     dest: /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
     mode: '0644'
@@ -18,9 +18,38 @@
   get_url:
     url: "{{ nvidia_driver_url }}"
     dest: /tmp/nvidia_driver.run
-    mode: 777
+    mode: '0777'
   when: not nvidia_mod.stat.exists
 
 - name: Install driver
   command: /bin/bash /tmp/nvidia_driver.run -s
   when: not nvidia_mod.stat.exists
+
+- name: Retrieve CUDA toolkit
+  get_url:
+    url: "{{ cuda_toolkit_url }}"
+    dest: /tmp/cuda_toolkit.run
+    mode: '0777'
+
+- name: Install CUDA toolkit
+  command: /bin/bash /tmp/cuda_toolkit.run
+
+- name: Retrieve cuDNN library
+  get_url:
+    url: "{{ cudnn_library_url }}"
+    dest: /tmp/cudnn_library.deb
+    mode: '0777'
+
+# TODO: Deb vs RedHat
+- name: Install cuDNN library
+  apt: deb="/tmp/cudnn_library.deb"
+
+- name: Retrieve TensorRT tool
+  get_url:
+    url: "{{ tensorrt_tool_url }}"
+    dest: /tmp/tensorrt.deb
+    mode: '0777'
+
+# TODO: Deb vs RedHat
+- name: Install TensorRT
+  apt: deb="/tmp/tensorrt.deb"
