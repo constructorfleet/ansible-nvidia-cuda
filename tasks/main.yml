@@ -1,14 +1,14 @@
-- name: Blacklist nouveau mod
-  copy:
-    src: nvidia-installer-disable-nouveau.conf
-    dest: /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-    mode: '0644'
-    owner: root
-    group: root
+# - name: Blacklist nouveau mod
+#   copy:
+#     src: nvidia-installer-disable-nouveau.conf
+#     dest: /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+#     mode: '0644'
+#     owner: root
+#     group: root
 
-- name: Reboot for mod blacklist to take effect
-  reboot:
-    reboot_timeout: 180
+# - name: Reboot for mod blacklist to take effect
+#   reboot:
+#     reboot_timeout: 180
 
 - stat:
     path: /lib/modules/4.15.0-72-generic/kernel/drivers/video/nvidia-drm.ko
