@@ -1,63 +1,56 @@
-# - name: Blacklist nouveau mod
-#   copy:
-#     src: nvidia-installer-disable-nouveau.conf
-#     dest: /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-#     mode: '0644'
-#     owner: root
-#     group: root
+---
 
-# - name: Reboot for mod blacklist to take effect
-#   reboot:
-#     reboot_timeout: 180
+- name: Check current state
+  block:
+    - stat:
+        path: /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+      register: mod_blacklisted
+    - stat:
+        path: /lib/modules/4.15.0-72-generic/kernel/drivers/video/nvidia-drm.ko
+      register: nvidia_mod
+    - stat:
+        path: /usr/local/cuda
+      register: cuda_toolkit
 
-- name: Make sure /var/cuda exists
+- name: Blacklist nouveau module
+  block:
+    - name: Blacklist nouveau mod
+      copy:
+        src: nvidia-installer-disable-nouveau.conf
+        dest: /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+        mode: '0644'
+        owner: root
+        group: root
+
+    - name: Reboot for mod blacklist to take effect
+      reboot:
+        reboot_timeout: 180
+  when:
+    - not mod_blacklisted.stat.exists
+
+- name: Install GPU driver
+  block:
+    - name: Retrieve driver
+      get_url:
+        url: "{{ nvidia_driver_url }}"
+        dest: /var/cuda/nvidia_driver.run
+        mode: '0777'
+    - name: Install driver
+      command: /bin/bash /var/cuda/nvidia_driver.run -s
+  when: not nvidia_mod.stat.exists
+
+- name: Make sure install temp directory exists
   file:
-    path: /var/cuda/tmp
+    path: "{{ cuda_install_temp_directory }}"
     state: directory
     owner: root
     group: root
-    mode: '0666'
-
-- stat:
-    path: /lib/modules/4.15.0-72-generic/kernel/drivers/video/nvidia-drm.ko
-  register: nvidia_mod
-
-- stat:
-    path: /var/cuda/cuda_toolkit.run
-  register: cuda_toolkit
-
-- stat:
-    path: /var/cuda/cudnn_library.deb
-  register: cudnn_library
-
-- name: Retrieve driver
-  get_url:
-    url: "{{ nvidia_driver_url }}"
-    dest: /var/cuda/nvidia_driver.run
     mode: '0777'
-  when: not nvidia_mod.stat.exists
 
-- name: Install driver
-  command: /bin/bash /var/cuda/nvidia_driver.run -s
-  when: not nvidia_mod.stat.exists
-
-- name: Retrieve CUDA toolkit
-  get_url:
-    url: "{{ cuda_toolkit_url }}"
-    dest: /var/cuda/cuda_toolkit.run
-    mode: '0777'
+- name: Install CUDA toolkit and patches
+  command: "/bin/bash {{ item }} --tmpdir={{ cuda_install_temp_directory }} --silent"
+  with_items: "{{ cuda_toolkit_paths }}"
   when: not cuda_toolkit.stat.exists
 
-- name: Install CUDA toolkit
-  command: /bin/bash /var/cuda/cuda_toolkit.run --tmpdir=/var/cuda/tmp/ --silent
-
-- name: Retrieve cuDNN library
-  copy:
-    src: libcudnn7-dev_7.6.5.32-1+cuda10.2_amd64.deb
-    dest: /var/cuda/cudnn_library.deb
-    mode: '0777'
-  when: not cudnn_library.stat.exists
-
-# TODO: Deb vs RedHat
-- name: Install cuDNN library
-  apt: deb="/var/cuda/cudnn_library.deb"
+- name: Install CuDNN libraries and run-times
+  command: "apt install -y {{ cudnn_library_paths | join(' ') }}"

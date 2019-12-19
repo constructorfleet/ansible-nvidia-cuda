@@ -1,6 +1,14 @@
 ---
 
+cuda_install_temp_directory: "/var/cuda/tmp"
+cuda_library_directory: "/data/lib/cuda"
+
 nvidia_driver_url: http://us.download.nvidia.com/tesla/440.33.01/NVIDIA-Linux-x86_64-440.33.01.run
-cuda_toolkit_url: http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_440.33.01_linux.run
-cudnn_library_url: https://developer.nvidia.com/compute/machine-learning/cudnn/secure/7.6.5.32/Production/10.2_20191118/Ubuntu18_04-x64/libcudnn7-dev_7.6.5.32-1%2Bcuda10.2_amd64.deb
-tensorrt_tool_url: https://developer.nvidia.com/compute/machine-learning/tensorrt/5.0/GA_5.0.2.6/local_repos/nv-tensorrt-repo-ubuntu1804-cuda10.0-trt5.0.2.6-ga-20181009_1-1_amd64.deb
+
+cuda_toolkit_paths: 
+  - "{{ cuda_library_directory }}/cuda_10.0.130_410.48_linux.run"
+  - "{{ cuda_library_directory }}/cuda_10.0.130.1_linux.run"
+
+cudnn_library_paths:
+  - "{{ cuda_library_directory }}/libcudnn7_7.5.0.56-1+cuda10.0_amd64.deb"
+  - "{{ cuda_library_directory }}/libcudnn7-dev_7.5.0.56-1+cuda10.0_amd64.deb"
