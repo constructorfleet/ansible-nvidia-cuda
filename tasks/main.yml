@@ -16,7 +16,7 @@
 
 - name: Retrieve driver
   get_url:
-    url: {{ nvidia_driver_url }}
+    url: "{{ nvidia_driver_url }}"
     dest: /tmp/nvidia_driver.run
     mode: 777
   when: not nvidia_mod.stat.exists
