@@ -10,6 +10,14 @@
 #   reboot:
 #     reboot_timeout: 180
 
+- name: Make sure /var/cuda exists
+  file:
+    path: /var/cuda
+    state: directory
+    owner: root
+    group: root
+    mode: '0666'
+
 - stat:
     path: /lib/modules/4.15.0-72-generic/kernel/drivers/video/nvidia-drm.ko
   register: nvidia_mod
