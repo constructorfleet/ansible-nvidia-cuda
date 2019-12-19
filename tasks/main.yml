@@ -22,6 +22,14 @@
     path: /lib/modules/4.15.0-72-generic/kernel/drivers/video/nvidia-drm.ko
   register: nvidia_mod
 
+- stat:
+    path: /var/cuda/cuda_toolkit.run
+  register: cuda_toolkit
+
+- stat:
+    path: /var/cuda/cudnn_library.deb
+  register: cudnn_library
+
 - name: Retrieve driver
   get_url:
     url: "{{ nvidia_driver_url }}"
@@ -38,41 +46,18 @@
     url: "{{ cuda_toolkit_url }}"
     dest: /var/cuda/cuda_toolkit.run
     mode: '0777'
+  when: not cuda_toolkit.stat.exists
 
 - name: Install CUDA toolkit
   command: /bin/bash /var/cuda/cuda_toolkit.run --tmpdir=/var/cuda/tmp/ --silent
 
-- name: Cleanup CUDA toolkit installer
-  file:
-    path: /var/cuda/cuda_toolkit.run
-    state: absent
-
 - name: Retrieve cuDNN library
-  get_url:
-    url: "{{ cudnn_library_url }}"
+  copy:
+    src: libcudnn7-dev_7.6.5.32-1+cuda10.2_amd64.deb
     dest: /var/cuda/cudnn_library.deb
     mode: '0777'
+  when: not cudnn_library.stat.exists
 
 # TODO: Deb vs RedHat
 - name: Install cuDNN library
   apt: deb="/var/cuda/cudnn_library.deb"
-
-- name: Cleanup cuDNN library
-  file:
-    path: /var/cuda/cudnn_library.deb
-    state: absent
-
-- name: Retrieve TensorRT tool
-  get_url:
-    url: "{{ tensorrt_tool_url }}"
-    dest: /var/cuda/tensorrt.deb
-    mode: '0777'
-
-# TODO: Deb vs RedHat
-- name: Install TensorRT
-  apt: deb="/var/cuda/tensorrt.deb"
-
-- name: Cleanup TensorRT
-  file:
-    path: /var/cuda/tensorrt.deb
-    state: absent
