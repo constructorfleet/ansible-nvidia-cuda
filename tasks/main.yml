@@ -58,10 +58,15 @@
       - cuda-10-0
       - libcuda1-340
       - libcuda1-340-updates
-      - nvidia-utils-440
       - cuda-drivers
     update_cache: yes
-    state: latest
+    state: present
+
+- name: Install NVidia Utils
+  apt:
+    name: nvidia-utils-440
+    update_cache: yes
+    state: preset
 
 - name: Install CuDNN Library
   apt:
