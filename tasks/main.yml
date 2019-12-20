@@ -42,8 +42,8 @@
       - cuda-10-0
       - cuda-demo-suite-10-0
       - cuda-runtime-10-0
-      - libcuda1-340
-      - libcuda1-340-updates
+      # - libcuda1-340
+      # - libcuda1-340-updates
       - nvidia-utils-440
       - cuda-drivers
     update_cache: yes
