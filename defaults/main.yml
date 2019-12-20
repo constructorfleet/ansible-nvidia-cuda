@@ -6,7 +6,7 @@ cuda_library_directory: "/data/lib/cuda"
 nvidia_driver_url: http://us.download.nvidia.com/tesla/440.33.01/NVIDIA-Linux-x86_64-440.33.01.run
 
 cuda_toolkit_paths: 
-  - "{{ cuda_library_directory }}/10/install_cuda_toolkit.sh"
+  - "{{ cuda_library_directory }}/10.0/install_cuda_toolkit.sh"
 
 cudnn_library_paths:
   - "{{ cuda_library_directory }}/libcudnn7_7.5.0.56-1+cuda10.0_amd64.deb"
