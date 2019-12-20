@@ -76,7 +76,7 @@
 
 - name: Install CuDNN libraries and run-times
   apt:
-    name: "{{ cudnn_library_paths }}"
+    deb: "{{ cudnn_library_paths }}"
 
 #- name: Install CuDNN libraries and run-times
 #  command: "apt install -y {{ cudnn_library_paths | join(' ') }}"
