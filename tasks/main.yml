@@ -74,9 +74,17 @@
 #  with_items: "{{ cuda_toolkit_paths }}"
 #  when: not cuda_toolkit.stat.exists
 
-- name: Install CuDNN libraries and run-times
+#- name: Install CuDNN libraries and run-times
+#  apt:
+#    deb: "{{ cudnn_library_paths }}"
+
+- name: Install thing1
   apt:
-    deb: "{{ cudnn_library_paths }}"
+    deb: "{{ cuda_library_directory }}/libcudnn7_7.5.0.56-1+cuda10.0_amd64.deb"
+
+- name: Install thing2
+  apt:
+    deb: "{{ cuda_library_directory }}/libcudnn7-dev_7.5.0.56-1+cuda10.0_amd64.deb"
 
 #- name: Install CuDNN libraries and run-times
 #  command: "apt install -y {{ cudnn_library_paths | join(' ') }}"
