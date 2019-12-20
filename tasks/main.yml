@@ -44,6 +44,7 @@
       - libcuda1-340-updates
       - nvidia-utils-440
     update_cache: yes
+    install_recommends: yes
     state: present
 
 - name: Install drivers
