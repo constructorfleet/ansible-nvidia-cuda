@@ -43,7 +43,7 @@
         dest: "{{ cuda_install_temp_directory }}//nvidia_driver.run"
         mode: '0777'
     - name: Install driver
-      command: /bin/bash /var/cuda/nvidia_driver.run -s
+      command: "/bin/bash {{ cuda_install_temp_directory }}//nvidia_driver.run -s"
   when: not nvidia_mod.stat.exists
 
 - name: Make sure install temp directory exists
