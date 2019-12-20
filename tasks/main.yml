@@ -55,7 +55,7 @@
     mode: '0777'
 
 - name: Install CUDA toolkit and patches
-  command: "/bin/bash {{ item }} --tmpdir={{ cuda_install_temp_directory }} --silent"
+  command: "/bin/bash {{ item }} --tmpdir={{ cuda_install_temp_directory }} --silent --accept-eula"
   with_items: "{{ cuda_toolkit_paths }}"
   when: not cuda_toolkit.stat.exists
 
