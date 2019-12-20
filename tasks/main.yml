@@ -36,23 +36,18 @@
     url: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
     state: present
 
-- name: Install Cuda pkg
+- name: Install CUDA/NVidia packages
   apt:
     name:
       - cuda-10-0
+      - cuda-demo-suite-10-0
+      - cuda-runtime-10-0
       - libcuda1-340
       - libcuda1-340-updates
       - nvidia-utils-440
-    update_cache: yes
-    install_recommends: yes
-    state: present
-
-- name: Install drivers
-  apt:
-    name:
       - cuda-drivers
     update_cache: yes
-    state: latest
+    state: present
 
 - name: Install CuDNN Library
   apt:
