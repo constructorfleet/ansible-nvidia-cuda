@@ -35,17 +35,6 @@
     group: root
     mode: '0777'
 
-#- name: Install GPU driver
-#  block:
-#    - name: Retrieve driver
-#      get_url:
-#        url: "{{ nvidia_driver_url }}"
-#        dest: "{{ cuda_install_temp_directory }}//nvidia_driver.run"
-#        mode: '0777'
-#    - name: Install driver
-#      command: "/bin/bash {{ cuda_install_temp_directory }}//nvidia_driver.run -s"
-#  when: not nvidia_mod.stat.exists
-
 - name: Make sure install temp directory exists
   file:
     path: "{{ cuda_install_temp_directory }}"
@@ -70,6 +59,7 @@
       - libcuda1-340
       - libcuda1-340-updates
       - nvidia-utils-440
+      - cuda-drivers
     update_cache: yes
     state: latest
 
