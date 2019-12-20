@@ -27,7 +27,7 @@
   when:
     - not mod_blacklisted.stat.exists
 
-- name: Install Cuda repository pkg
+- name: Install CUDA repository pkg
   apt:
     deb: "{{ cuda_library_directory }}/10.0/cuda-repo-ubuntu1804_10.0.130-1_amd64.deb"
 
@@ -42,8 +42,6 @@
       - cuda-10-0
       - cuda-demo-suite-10-0
       - cuda-runtime-10-0
-      # - libcuda1-340
-      # - libcuda1-340-updates
       - nvidia-utils-440
       - cuda-drivers
     update_cache: yes
