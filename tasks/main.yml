@@ -27,22 +27,6 @@
   when:
     - not mod_blacklisted.stat.exists
 
-- name: Make sure cuda library directory exists
-  file:
-    path: "{{ cuda_install_temp_directory }}"
-    state: directory
-    owner: root
-    group: root
-    mode: '0777'
-
-- name: Make sure install temp directory exists
-  file:
-    path: "{{ cuda_install_temp_directory }}"
-    state: directory
-    owner: root
-    group: root
-    mode: '0777'
-
 - name: Install Cuda repository pkg
   apt:
     deb: "{{ cuda_library_directory }}/10.0/cuda-repo-ubuntu1804_10.0.130-1_amd64.deb"
@@ -58,15 +42,16 @@
       - cuda-10-0
       - libcuda1-340
       - libcuda1-340-updates
-      - cuda-drivers
+      - nvidia-utils-440
     update_cache: yes
     state: present
 
-- name: Install NVidia Utils
+- name: Install drivers
   apt:
-    name: nvidia-utils-440
+    name:
+      - cuda-drivers
     update_cache: yes
-    state: preset
+    state: latest
 
 - name: Install CuDNN Library
   apt:
