@@ -54,10 +54,29 @@
     group: root
     mode: '0777'
 
-- name: Install CUDA toolkit and patches
-  command: "/bin/bash {{ item }} --tmpdir={{ cuda_install_temp_directory }} --silent --accept-eula"
-  with_items: "{{ cuda_toolkit_paths }}"
-  when: not cuda_toolkit.stat.exists
+- name: Install Cuda repository pkg
+  apt:
+    deb: "{{ cuda_library_directory }}/10.0/cuda-repo-ubuntu1804_10.0.130-1_amd64.deb"
+
+- name: Install apt key
+  apt-key:
+    url: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
+    state: present
+
+- name: Install Cuda pkg
+  apt:
+    name: cuda
+    update_cache: yes
+    state: latest
+
+#- name: Install CUDA toolkit and patches
+#  command: "/bin/bash {{ item }} --tmpdir={{ cuda_install_temp_directory }} --silent --accept-eula"
+#  with_items: "{{ cuda_toolkit_paths }}"
+#  when: not cuda_toolkit.stat.exists
 
 - name: Install CuDNN libraries and run-times
-  command: "apt install -y {{ cudnn_library_paths | join(' ') }}"
+  apt:
+    name: "{{ cudnn_library_paths }}"
+
+#- name: Install CuDNN libraries and run-times
+#  command: "apt install -y {{ cudnn_library_paths | join(' ') }}"
