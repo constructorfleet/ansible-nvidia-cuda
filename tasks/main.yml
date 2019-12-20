@@ -65,26 +65,18 @@
 
 - name: Install Cuda pkg
   apt:
-    name: cuda
+    name:
+      - cuda-10-0
+      - libcuda1-340
+      - libcuda1-340-updates
+      - nvidia-utils-440
     update_cache: yes
     state: latest
 
-#- name: Install CUDA toolkit and patches
-#  command: "/bin/bash {{ item }} --tmpdir={{ cuda_install_temp_directory }} --silent --accept-eula"
-#  with_items: "{{ cuda_toolkit_paths }}"
-#  when: not cuda_toolkit.stat.exists
-
-#- name: Install CuDNN libraries and run-times
-#  apt:
-#    deb: "{{ cudnn_library_paths }}"
-
-- name: Install thing1
+- name: Install CuDNN Library
   apt:
     deb: "{{ cuda_library_directory }}/libcudnn7_7.5.0.56-1+cuda10.0_amd64.deb"
 
-- name: Install thing2
+- name: Install CuDNN Dev Library
   apt:
     deb: "{{ cuda_library_directory }}/libcudnn7-dev_7.5.0.56-1+cuda10.0_amd64.deb"
-
-#- name: Install CuDNN libraries and run-times
-#  command: "apt install -y {{ cudnn_library_paths | join(' ') }}"
